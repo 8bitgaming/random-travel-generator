@@ -4,18 +4,84 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Random Travel Generator</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
-<body>
-    <header>
-        <h1>Find Your Next Travel Destination</h1>
-    </header>
 
-    <section class = "hero">
-        <h2>Whether you're a travel enthusiast or just curious about the world, push the button below to find a destination!</h2>
-        <button type = "generate">Get a City!</button>
-    </section>
+    <body>
+    <!--container with banner-->
+    <div class="w3-display-container w3-center" style="margin-bottom:50px">
+        <img src="https://wallpaperbat.com/img/294144-airplane-4k-wallpaper-top-free-airplane-4k-background.jpg" style="width:100%">
+      <div class="w3-display-bottomleft w3-container w3-white w3-hide-small"
+       style="bottom:30%;opacity:0.7;width:100%">
+      <h2><b>Random Travel<br>Generator</b></h2>
+      <p>this is some random info about the sity!</p> 
+      <div class="w3-container">
+        <p><button class="w3-button w3-black w3-round-large">Select A City!</button></p>
+      </div>
+    </div>
+    </div>
     
-    
+    <!--City Details-->
+    <div class="w3-row w3-container" style="margin:50px 0">
+    <div class="w3-half w3-container">
+      <div class="w3-topbar w3-border-black">
+        <h2>City Details</h2>
+        <p>City Name</p>
+        <p>Elevation</p>
+      </div>
+    </div>
+
+    <!--Entertaiment Info-->
+    <div class="w3-half w3-container">
+      <div class="w3-topbar w3-border-black">
+        <h2>Entertainment</h2>
+        <p>some fun things to do!</p>
+      </div>
+    </div>
+    </div>
+
+    <!--Weather Information-->
+    <div class="w3-row w3-container w3-center" style="margin:50px 0">
+    <div class="w3-container">
+      <div class="w3-topbar w3-border-black">
+        <h2>Weather</h2>
+        <p>7-day forecast</p>
+      </div>
+    </div>
+
+    <!--Flight Information, **Optional**-->
+    <div class="w3-container w3-center">
+      <div class="w3-topbar w3-border-black">
+        <h2>Optional-Flight Info</h2>
+        <p>$$$$</p>
+        </div>
+    </div>
+
+    <!--Search History Banner-->   
+ <div id="members" class="w3-container w3-padding-32 w3-topbar w3-border-black">
+        <h2 class="w3-center">Search History</h2>
+        <div class="w3-row w3-center">
+
+     <!--Search History Container 1-->       
+    <div class="w3-container w3-pale-yellow">
+        <p>history 1</p>
+      </div>
+      
+      <!--Search History Container 2-->       
+      <div class="w3-container w3-pale-yellow">
+        <p>history 2</p>
+      </div>
+
+      <!--Search History Container 3-->  
+      <div class="w3-container w3-pale-red">
+        <p>history 3</p>
+      </div>     
+
+    <!--Search History Container 4--> 
+      <div class="w3-container w3-pale-red">
+        <p>history 4</p>
+      </div>
+</div>
 </body>
 </html>
