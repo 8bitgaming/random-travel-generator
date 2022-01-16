@@ -1,27 +1,45 @@
-var repoList = document.querySelector('p');
-var cityName = document.getElementById('generate-btn');
+var repoList = document.querySelector('myDiv');
+var fetchButton = document.getElementById('generateBtn');
+var cityNumber = 0;
+var startRow = 0;
+var remainder = 0;
 
-//generateName function is called when the 'generate' button is clicked (link with button after pull)
-function generateName() {
-    var requestCity = 'http://api.geonames.org/countryInfo?';
+// api url
+const api_url1 = "http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=SHORT&cities=cities15000";
 
-    fetch(requestCity)
-      then(function(response) {
-          return response.json();
-      })
-      then(function(data) {
+// Defining async function
+async function getapi(api_url1) {
+    
+    // Storing response
+    const response = await fetch(api_url1);
+    
+    // Storing data in form of JSON
+    var data1 = await response.json();
+    console.log(data1);
 
-        for (var i = 0; i < data.lenth; i++) {
-      //create element
-      var displayLocation = document.createElement('div');
+    var totalCities = data1.totalResultsCount;
+    console.log("cityNumber", totalCities);
 
-      //text of div element to .html_url property
-      displayLocation.textContent
+    //randomly generates number in array
+    cityNumber = Math.floor(Math.random()*totalCities);
+    console.log(cityNumber);
 
-      //apend location element
-      repoList.appendChild(displayLocation);
-      }
-    });
-};
+    startRow = Math.floor(cityNumber/1000);
+    console.log(startRow);
+    remainder = cityNumber%1000;
+    console.log(remainder);
 
-cityName.addEventListener('click', generateName);
+    const api_url2 = `http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=SHORT&cities=cities15000&startRow=${startRow}`;
+
+    const response2 = await fetch(api_url2);
+    var data2 = await response2.json();
+    console.log(data2);
+
+    console.log(cityNumber);
+    console.log("cityname", data2.geonames[remainder].name);
+    console.log("cityid", data2.geonames[remainder].geonameId);
+    console.log("country", data2.geonames[remainder].countryCode);
+}
+
+// Calling that async function
+getapi(api_url1);
