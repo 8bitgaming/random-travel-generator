@@ -70,3 +70,17 @@ const getCityLatLong = (city) => {
   }
 
   getCityLatLong("Detroit")
+
+  let url = `https://en.wikipedia.org/w/rest.php/v1/page/cities?search=10`;
+
+fetch(url)
+.then(function(response) {
+  if(response.ok) {
+    response.json()
+    .then(function(data) {
+      console.log(data);
+    }
+    )
+  } 
+}
+)
