@@ -43,13 +43,16 @@
     </div>
 
     <!--Weather Information-->
-    <div class="w3-row w3-container w3-center" style="margin:50px 0">
-    <div class="w3-container">
+    <div class="w3-container w3-center" style="margin:50px 0">
       <div class="w3-topbar w3-border-black">
         <h2>Weather</h2>
-        <div class="w3-row-padding" id="7-day-forecast"></div>
+        <div class="w3-third w3-padding-small">
+          <button class="w3-button w3-dark-gray w3-round" id="historical-button">Historical/Current</button>
+          <button class="w3-button w3-dark-gray w3-round" id="units-button">Metric/Imperial</button>
+        </div>
+        <div class="weather-container w3-row" id="7-day-forecast"></div>
+        <div class="w3-row" id="historical-weather"></div>
       </div>
-    </div>
 
     <!--Flight Information, **Optional**-->
     <div class="w3-container w3-center">
