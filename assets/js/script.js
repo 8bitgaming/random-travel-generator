@@ -39,7 +39,18 @@ async function getapi(api_url1) {
     console.log("cityname", data2.geonames[remainder].name);
     console.log("cityid", data2.geonames[remainder].geonameId);
     console.log("country", data2.geonames[remainder].countryCode);
+
+    var cityName = data2.geonames[remainder].name;
+    var pSelected = document.getElementById('city');
+    pSelected.innerText = cityName;
 }
 
-// Calling that async function
-getapi(api_url1);
+
+fetchButton.addEventListener('click', function(e) {
+  if(e.target) {
+    console.log("I'm clicked");
+    getapi(api_url1);
+  }
+});
+
+
