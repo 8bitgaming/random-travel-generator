@@ -1,14 +1,35 @@
+//Global variables
+let apiKey = 'fbf31d182481f35e3b9fc07c433c4e62'
 var repoList = document.querySelector('myDiv');
 var fetchButton = document.getElementById('generateBtn');
 var cityNumber = 0;
 var startRow = 0;
 var remainder = 0;
+let units = 'imperial'
+let tempUnits = '°F'
+let windSpeedUnits = 'MPH'
+let cityLat = 0;
+let cityLong = 0;
+let months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+  ];
 
-// api url
+// First API call to get list of potential cities from geonames
 const api_url1 = "http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Short&cities=cities15000";
 
 // Defining async function
-async function getapi(api_url1) {
+async function getRandomCity(api_url1) {
     
     // Storing response
     const response = await fetch(api_url1);
@@ -25,7 +46,6 @@ async function getapi(api_url1) {
     
 
     startRow = Math.floor(cityNumber/1000);
-    
     remainder = cityNumber%1000;
 
     const api_url2 = `http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Full&cities=cities15000&startRow=${startRow}`;
@@ -34,58 +54,23 @@ async function getapi(api_url1) {
     var data2 = await response2.json();
     console.log(data2);
 
-    /*console.log(cityNumber);
-    console.log("cityname", data2.geonames[remainder].name);
-    console.log("cityid", data2.geonames[remainder].geonameId);
-    console.log("country", data2.geonames[remainder].countryCode);*/
-
     var cityName = data2.geonames[remainder].name;
     var country = data2.geonames[remainder].countryCode;
+    cityLat = data2.geonames[remainder].lat
+    cityLong = data2.geonames[remainder].lng
     var pSelected = document.getElementById('city');
     pSelected.innerText = "Your next destination: " + cityName;
 
+    //Make the call to get the weather details
+    getWeather(cityLat, cityLong, units)
 
 }
 
-fetchButton.addEventListener('click', function(e) {
-  if(e.target) {
-    console.log("I'm clicked");
-    getapi(api_url1);
-  }
-});
+  //Get the current forecast/weather for the city
+  const getWeather = (cityLat, cityLong, units) => {
+    //clear historical if it exists
+    $("#historical-weather").empty()
 
-// Calling that async function
-getapi(api_url1);
-
-let apiKey = 'fbf31d182481f35e3b9fc07c433c4e62'
-let units = 'imperial'
-let tempUnits = '°F'
-let windSpeedUnits = 'MPH'
-
-//initial call to get city name and coordinates for use by the getWeather api call
-const getCityLatLong = (city) => {
-
-    let apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units&appid=${apiKey}`
-  
-    fetch(apiURL).then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          let cityLat = data.coord.lat
-          let cityLong = data.coord.lon
-          let cityName = data.name
-          getWeather(cityLat, cityLong, cityName);    
-        })
-      } else {
-        alert("City Not Found!")
-        invalidCity = true
-        
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
-
-  const getWeather = (cityLat, cityLong, cityName) => {
     if (cityLat && cityLong) {
       let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLong}&units=${units}&exclude=hourly,minutely,alerts&appid=${apiKey}`
   
@@ -94,12 +79,6 @@ const getCityLatLong = (city) => {
           response.json().then(function (data) {
 
             console.log(data)
-
-            // let currentForecast = document.createElement("div")
-            // currentForecast.id = 'current-forecast'
-            // currentForecast.classList.add("w3-card-4", "w3-blue", "w3-col", "m3", "l6", "w3-round")
-            // currentForecast.textContent = "PlaceHolder for current"
-            // $("#7-day-forecast").append(currentForecast)
 
             for (let i = 1; i < 6 ; i++) {
               let sevenForecastDate = moment.unix(data.daily[i].dt).format('L')
@@ -119,9 +98,9 @@ const getCityLatLong = (city) => {
               let forecastDate = document.createElement("h4")
               forecastDate.textContent = sevenForecastDate
               let forecastTemp = document.createElement("p")
-              forecastTemp.textContent = `Temp: ${sevenTemp}${ tempUnits}`
+              forecastTemp.textContent = `Temp: ${sevenTemp} ${tempUnits}`
               let forecastWind = document.createElement("p")
-              forecastWind.textContent = `Wind: ${sevenWind}${ windSpeedUnits}`
+              forecastWind.textContent = `Wind: ${sevenWind} ${windSpeedUnits}`
               let forecastHumidity = document.createElement("p")
               forecastHumidity.textContent = `Humidity: ${sevenHumidity}%`
   
@@ -136,58 +115,106 @@ const getCityLatLong = (city) => {
     }
   }
 
-<<<<<<< HEAD
-  const getHistorical = (city) => {
-    let months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-      ];
-
-    for (let i = 1; i < 13; i++) {
-      let apiURL = `https://history.openweathermap.org/data/2.5/aggregated/month?q=${city}&month=${i}&units=${units}&appid=${apiKey}`
-
-      fetch(apiURL).then(function (response) {
-        if (response.ok) {
-          response.json().then(function (data) {
-
-            // let month = response.
-            console.log("history", data)
-
-
-          })
-        }
-      })    
+  //Event listener to start the search process and get the details for a random city
+  fetchButton.addEventListener('click', function(e) {
+    if(e.target) {
+      console.log("I'm clicked");
+      getRandomCity(api_url1);
     }
-  }
+  });
 
-  
-  $("#units-button").on("click", function (e) {
-  if (units === 'imperial'){units = 'metric'} else {units='imperial'}
-  if (tempUnits === '°F'){tempUnits = '°C'} else {tempUnits='°F'}
-  if (windSpeedUnits === 'MPH'){windSpeedUnits = 'm/s'} else {windSpeedUnits = 'MPH'}
+  //Event listener to switch weather units, and recall the weather details
+  let unitsButton = $("#units-button")
+  unitsButton.on("click", function () {
+      if (units === 'imperial') {
+        units='metric'
+        unitsButton.text('Metric')
+      } else {
+        units = 'imperial'
+        unitsButton.text('Imperial')
+      }
 
-  console.log(units, tempUnits, windSpeedUnits)
+      if (tempUnits === '°F') {
+        tempUnits ='°C'
+      } else 
+      {tempUnits = '°F'
+        }
+
+      if (windSpeedUnits === 'MPH') {
+        windSpeedUnits='m/s'
+      } else 
+      {windSpeedUnits = 'MPH'
+        }
+
+    //first clear all the HTMl elements, then recall with new values
+    $("#7-day-forecast").empty()
+    getWeather(cityLat, cityLong, units)
 
   })
 
-  getCityLatLong("Detroit")
-  getHistorical("Detroit")
+  //event listener for historical weather call
+  let historicalButton = $("#historical-button")
+  historicalButton.on("click", function () {
+
+    //Switch Button Text
+    if (historicalButton.text() === 'Current'){
+      historicalButton.text('Historical')
+      getHistoricalWeather()
+    } else {
+      historicalButton.text('Current')
+      getWeather(cityLat, cityLong, units)
+    }
+
+    
+  })
+
+  const getHistoricalWeather =  async () => {
+
+        //clear weather section
+        $("#7-day-forecast").empty()
+
+        //Iterate through 12 months of weather data
+        for (let i=1; i < 13; i++){
+
+          let historicalWeatherApi = `https://history.openweathermap.org/data/2.5/aggregated/month?lat=${cityLat}&lon=${cityLong}&month=${i}&appid=${apiKey}`
+          const response = await fetch(historicalWeatherApi);
+          let last12Weather = await response.json();
+          console.log(last12Weather)
+
+          //get month
+          let month = last12Weather.result.month
+
+          //get temp and convert temp from Kelvin since the API does not support units
+          let monthAvgHigh = last12Weather.result.temp.average_max
+          if (units === 'imperial') {
+            monthAvgHigh = Math.floor(((monthAvgHigh-273.15)*1.8)+32)
+          } else {
+            monthAvgHigh = Math.floor(monthAvgHigh-273.15)
+          }
 
 
-  // units = units ('imperial' ? 'metric' : 'imperial')
-  // tempUnits = tempUnits ('°F' ? '°C' : '°F')
-  // windSpeedUnits = windSpeedUnits ('MPH' ? 'm/s' : 'MPH')
-=======
-  getCityLatLong("Detroit")
+          let historicalForecastBox = document.createElement("div")
+          historicalForecastBox.id = `historical-month${i}`
+          historicalForecastBox.classList.add("w3-card-4", "w3-blue", "w3-col", "m2", "l2", "w3-round")
+          
+          //finding the correct month in the array - need to subtract one as the month array starts a zero vs the result starts at 1
+          let monthTitle = document.createElement("h4")
+          monthTitle.textContent = months[month - 1]
+          
+          let avgHighTemp = document.createElement("p")
+          avgHighTemp.textContent = `Avg High: ${monthAvgHigh} ${tempUnits}`
 
->>>>>>> 6d1d44699448f7b63ef335620639593847a6ff18
+          $("#historical-weather").append(historicalForecastBox)
+          $("#historical-month"+i).append(monthTitle, avgHighTemp)
+
+          
+
+          
+
+      
+        }
+  }
+
+  
+  
+
