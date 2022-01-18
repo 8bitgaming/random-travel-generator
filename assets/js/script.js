@@ -10,6 +10,7 @@ let tempUnits = '°F'
 let windSpeedUnits = 'MPH'
 let cityLat = 0;
 let cityLong = 0;
+let cityName = ''
 let months = [
   'January',
   'February',
@@ -51,18 +52,24 @@ async function getRandomCity(api_url1) {
     const api_url2 = `http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Full&cities=cities15000&startRow=${startRow}`;
 
     const response2 = await fetch(api_url2);
+    $("#loading-message").text("You're going to ...")
     var data2 = await response2.json();
+    
     console.log(data2);
 
-    var cityName = data2.geonames[remainder].name;
+    cityName = data2.geonames[remainder].name;
     var country = data2.geonames[remainder].countryCode;
     cityLat = data2.geonames[remainder].lat
     cityLong = data2.geonames[remainder].lng
     var pSelected = document.getElementById('city');
+    $("#loading-message").text(`${cityName}!`)
     pSelected.innerText = "Your next destination: " + cityName;
 
     //Make the call to get the weather details
     getWeather(cityLat, cityLong, units)
+
+    //Make the call to get the Wikipedia summary
+    getWikiSummary(cityName)
 
 }
 
@@ -213,6 +220,46 @@ async function getRandomCity(api_url1) {
 
       
         }
+  }
+//Connect to Wikipedia article summary for the city
+  const getWikiSummary = async (city) => {
+
+    //use regex to check for white space and replace with _ as required by API
+    let regex = /\s/g;
+    city = city.replaceAll(regex, "_" )
+
+    let wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${city}`
+    const response = await fetch(wikiUrl);
+    let wikiSummary = await response.json();
+    console.log(wikiSummary)
+    let summary = wikiSummary.extract
+    let link = wikiSummary.content_urls.desktop.page
+
+    //build summary div
+    let summaryEl = $("#summary")
+    // summaryEl.classList.add("w3-blue", "w3-container", "w3-round")
+    summaryEl.text(summary)
+
+    let linkEl = document.createElement("a")
+    linkEl.setAttribute("href", link)
+    linkEl.setAttribute("target", "_blank")
+    linkEl.textContent = "Link to full article"
+    $("#link").append(linkEl)
+
+    //clear any previous images that may exist
+    $("#city-thumbnail").empty()
+
+    //if not a disambiguation page, get the thumbnail add add to summary div
+    if (wikiSummary.thumbnail.source) {
+      let thumbnail = wikiSummary.thumbnail.source
+      let thumbnailEl = document.createElement("img")
+      thumbnailEl.classList.add("w3-margin", "w3-round", "w3-image")
+      thumbnailEl.setAttribute("src", `${thumbnail}`)
+      thumbnailEl.setAttribute("alt", `Picture of ${cityName}`)
+      $("#city-thumbnail").append(thumbnailEl)
+      
+      }
+    // $("#summary").append(summaryEl)
   }
 
   
