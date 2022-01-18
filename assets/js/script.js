@@ -94,7 +94,7 @@ async function getRandomCity(api_url1) {
   
               let forecastBox = document.createElement("div")
               forecastBox.id = `weather-day-${[i]}`
-              forecastBox.classList.add("w3-card-4", "w3-blue", "w3-col", "m3", "l2", "w3-round")
+              forecastBox.classList.add("w3-card-4", "w3-blue", "w3-col", "m3", "l2", "w3-round", "w3-margin")
               let forecastDate = document.createElement("h4")
               forecastDate.textContent = sevenForecastDate
               let forecastTemp = document.createElement("p")
@@ -146,9 +146,16 @@ async function getRandomCity(api_url1) {
       {windSpeedUnits = 'MPH'
         }
 
-    //first clear all the HTMl elements, then recall with new values
-    $("#7-day-forecast").empty()
-    getWeather(cityLat, cityLong, units)
+    //first clear all the HTMl elements, then call correct API
+    if (historicalButton.text() === 'Current'){
+      $("#7-day-forecast").empty()
+      getWeather(cityLat, cityLong, units)
+    } else {
+      $("#historical-weather").empty()
+      getHistoricalWeather()
+    }
+
+
 
   })
 
@@ -168,6 +175,7 @@ async function getRandomCity(api_url1) {
     
   })
 
+  //function for historical weather details
   const getHistoricalWeather =  async () => {
 
         //clear weather section
@@ -176,42 +184,51 @@ async function getRandomCity(api_url1) {
         //Iterate through 12 months of weather data
         for (let i=1; i < 13; i++){
 
+          //construct the call - use async/await vs. promises for readability
           let historicalWeatherApi = `https://history.openweathermap.org/data/2.5/aggregated/month?lat=${cityLat}&lon=${cityLong}&month=${i}&appid=${apiKey}`
           const response = await fetch(historicalWeatherApi);
           let last12Weather = await response.json();
           console.log(last12Weather)
 
-          //get month
+          //get month and finding the correct month in the array - need to subtract one as the month array starts a zero vs the result starts at 1
           let month = last12Weather.result.month
+          let monthTitle = document.createElement("h4")
+          monthTitle.textContent = months[month - 1]
 
-          //get temp and convert temp from Kelvin since the API does not support units
+          //get avg HIGH temp and convert temp from Kelvin since the API does not support units
           let monthAvgHigh = last12Weather.result.temp.average_max
           if (units === 'imperial') {
             monthAvgHigh = Math.floor(((monthAvgHigh-273.15)*1.8)+32)
           } else {
             monthAvgHigh = Math.floor(monthAvgHigh-273.15)
           }
-
-
-          let historicalForecastBox = document.createElement("div")
-          historicalForecastBox.id = `historical-month${i}`
-          historicalForecastBox.classList.add("w3-card-4", "w3-blue", "w3-col", "m2", "l2", "w3-round")
-          
-          //finding the correct month in the array - need to subtract one as the month array starts a zero vs the result starts at 1
-          let monthTitle = document.createElement("h4")
-          monthTitle.textContent = months[month - 1]
-          
           let avgHighTemp = document.createElement("p")
           avgHighTemp.textContent = `Avg High: ${monthAvgHigh} ${tempUnits}`
 
+          //get avg LOW temp and convert from Kelvin
+          let monthAvgLow = last12Weather.result.temp.average_min
+          if (units === 'imperial') {
+            monthAvgLow = Math.floor(((monthAvgLow-273.15)*1.8)+32)
+          } else {
+            monthAvgLow = Math.floor(monthAvgLow-273.15)
+          }
+          let avgLowTemp = document.createElement("p")
+          avgLowTemp.textContent = `Avg Low: ${monthAvgLow} ${tempUnits}`
+
+          //get and add element for average sunshine hours
+          let avgSunshineHours = Math.floor(last12Weather.result.sunshine_hours)
+          let avgSunshine = document.createElement("p")
+          avgSunshine.textContent = `Sunshine: ${avgSunshineHours} hrs`
+
+          //generate holding div for historical weather info
+          let historicalForecastBox = document.createElement("div")
+          historicalForecastBox.id = `historical-month${i}`
+          historicalForecastBox.classList.add("w3-card-4", "w3-blue", "w3-col", "m2", "l2", "w3-round", "w3-margin")
+          
+          //append historical weather to existing DOM element
           $("#historical-weather").append(historicalForecastBox)
-          $("#historical-month"+i).append(monthTitle, avgHighTemp)
+          $("#historical-month"+i).append(monthTitle, avgHighTemp, avgLowTemp, avgSunshine)
 
-          
-
-          
-
-      
         }
   }
 
