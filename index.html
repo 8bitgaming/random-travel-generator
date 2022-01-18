@@ -16,18 +16,19 @@
       <div class="w3-display-bottomleft w3-container w3-white w3-hide-small"
        style="bottom:30%;opacity:0.7;width:100%">
       <h2><b>Random Travel<br>Generator</b></h2>
-      <p>this is some random info about the city!</p> 
-      <div class="w3-container">
+     <div class="w3-container">
         <p><button id="generateBtn" class="w3-button w3-black w3-round-large">Select A City!</button></p>
       </div>
+      <h3 id="loading-message"></h3> 
     </div>
     </div>
     
     <!--City Details-->
     <div class="w3-row w3-container" style="margin:50px 0">
-    <div class="w3-half w3-container">
+    <div class="w3-third w3-container">
       <div id = "myDiv" class="w3-topbar w3-border-black">
         <h2>City Details</h2>
+        <div id="city-thumbnail" style="width: 100%;"></div>
         <p id='city' ></p>
         <p id="country"></p>
         <p id="country"></p>
@@ -38,11 +39,11 @@
     </div>
 
     <!--Entertaiment Info-->
-    <div class="w3-half w3-container">
+    <div class="w3-twothird w3-container">
       <div class="w3-topbar w3-border-black">
-        <h2>Entertainment</h2>
-        <p>some fun things to do!</p>
-      </div>
+        <h2>About</h2>
+        <div id="summary" class="w3-margin w3-container"></div>
+        <div id="link"></div>
     </div>
     </div>
 
