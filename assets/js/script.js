@@ -57,7 +57,7 @@ async function getRandomCity(api_url1) {
     console.log(data2);
   
     var country = data2.geonames[remainder].countryName;
-    var population = data2.geonames[remainder].population;
+    var population = (data2.geonames[remainder].population).toLocaleString("en-US");
     var timeZone = data2.geonames[remainder].timezone.timeZoneId;
     var pSelected = document.getElementById('city');
     var pCountryEl = document.getElementById('country');
