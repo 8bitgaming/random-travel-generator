@@ -44,7 +44,6 @@ async function getRandomCity(api_url1) {
 
     //randomly generates number in array
     cityNumber = Math.floor(Math.random()*totalCities);
-    
 
     startRow = Math.floor(cityNumber/1000);
     remainder = cityNumber%1000;
@@ -56,14 +55,23 @@ async function getRandomCity(api_url1) {
     var data2 = await response2.json();
     
     console.log(data2);
-
+  
+    var country = data2.geonames[remainder].countryName;
+    var population = data2.geonames[remainder].population;
+    var timeZone = data2.geonames[remainder].timezone.timeZoneId;
+    var pSelected = document.getElementById('city');
+    var pCountryEl = document.getElementById('country');
+    var pPPLEl = document.getElementById('ppl');
+    var timeZoneEl = document.getElementById('timeZone');
     cityName = data2.geonames[remainder].name;
-    var country = data2.geonames[remainder].countryCode;
     cityLat = data2.geonames[remainder].lat
     cityLong = data2.geonames[remainder].lng
-    var pSelected = document.getElementById('city');
     $("#loading-message").text(`${cityName}!`)
+  
     pSelected.innerText = "Your next destination: " + cityName;
+    pCountryEl.innerText = "Country: " + country;
+    pPPLEl.innerText = "Population: "  + population;
+    timeZoneEl.innerText = "Time Zone: "  + timeZone;
 
     //Make the call to get the weather details
     getWeather(cityLat, cityLong, units)
