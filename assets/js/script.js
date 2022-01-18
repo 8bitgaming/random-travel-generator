@@ -39,9 +39,17 @@ async function getapi(api_url1) {
     console.log("country", data2.geonames[remainder].countryCode);*/
 
     var cityName = data2.geonames[remainder].name;
-    var country = data2.geonames[remainder].countryCode;
+    var country = data2.geonames[remainder].countryName;
+    var population = data2.geonames[remainder].population;
+    var timeZone = data2.geonames[remainder].timezone.timeZoneId;
     var pSelected = document.getElementById('city');
+    var pCountryEl = document.getElementById('country');
+    var pPPLEl = document.getElementById('ppl');
+    var timeZoneEl = document.getElementById('timeZone');
     pSelected.innerText = "Your next destination: " + cityName;
+    pCountryEl.innerText = "Country: " + country;
+    pPPLEl.innerText = "Population: "  + population;
+    timeZoneEl.innerText = "Time Zone: "  + timeZone;
 
 
 }
