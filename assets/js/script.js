@@ -143,11 +143,6 @@ async function getRandomCity(api_url1) {
       console.log("I'm clicked");
       getRandomCity(api_url1);
     }
-    
-    if(e.target) {
-      console.log("I'm clicked");
-      getRandomCity(api_url1);
-    }
   });
 
   //Event listener to switch weather units, and recall the weather details
@@ -181,9 +176,6 @@ async function getRandomCity(api_url1) {
       $("#historical-weather").empty()
       getHistoricalWeather()
     }
-
-
-
   })
 
   //event listener for historical weather call
@@ -198,8 +190,6 @@ async function getRandomCity(api_url1) {
       historicalButton.text('Current')
       getWeather(cityLat, cityLong, units)
     }
-
-    
   })
 
   //function for historical weather details
@@ -282,6 +272,7 @@ async function getRandomCity(api_url1) {
     linkEl.setAttribute("href", link)
     linkEl.setAttribute("target", "_blank")
     linkEl.textContent = "Link to full article"
+    $("#link").empty(linkEl);
     $("#link").append(linkEl)
 
     //clear any previous images that may exist
@@ -326,7 +317,6 @@ $("#clear-history").on("click", function () {
   $("#history").empty()
   
 })
-    // $("#summary").append(summaryEl)
-  }
+
 
 
