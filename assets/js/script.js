@@ -67,11 +67,13 @@ async function getRandomCity(api_url1) {
     cityLat = data2.geonames[remainder].lat
     cityLong = data2.geonames[remainder].lng
     $("#loading-message").text(`${cityName}!`)
-  
+
     pSelected.innerText = "Your next destination: " + cityName;
     pCountryEl.innerText = "Country: " + country;
     pPPLEl.innerText = "Population: "  + population;
     timeZoneEl.innerText = "Time Zone: "  + timeZone;
+    renderSearchHistory();
+
 
     //Make the call to get the weather details
     getWeather(cityLat, cityLong, units)
@@ -132,6 +134,16 @@ async function getRandomCity(api_url1) {
 
   //Event listener to start the search process and get the details for a random city
   fetchButton.addEventListener('click', function(e) {
+
+    //clear any previous weather info
+    $("#7-day-forecast").empty()
+    $("#historical-weather").empty()
+
+    if(e.target) {
+      console.log("I'm clicked");
+      getRandomCity(api_url1);
+    }
+    
     if(e.target) {
       console.log("I'm clicked");
       getRandomCity(api_url1);
@@ -262,6 +274,7 @@ async function getRandomCity(api_url1) {
 
     //build summary div
     let summaryEl = $("#summary")
+
     // summaryEl.classList.add("w3-blue", "w3-container", "w3-round")
     summaryEl.text(summary)
 
@@ -284,9 +297,36 @@ async function getRandomCity(api_url1) {
       $("#city-thumbnail").append(thumbnailEl)
       
       }
+  }
+
+  function renderSearchHistory() {
+    
+    let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
+    if (cityName != ""){searchHistory.push(cityName);}
+    localStorage.setItem("search",JSON.stringify(searchHistory));
+    
+    console.log(searchHistory);
+    var historyEl = document.getElementById("history");
+    console.log(cityName);
+    historyEl.innerHTML = "";
+    for (let i=0; i<searchHistory.length; i++) {
+        const historyItem = document.createElement("input");
+        // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"></input>
+        historyItem.setAttribute("type","text");
+        historyItem.setAttribute("readonly",true);
+        historyItem.setAttribute("class", "form-control d-block bg-white");
+        historyItem.setAttribute("value", searchHistory[i]);
+        historyEl.append(historyItem);
+    }
+}
+
+$("#clear-history").on("click", function () {
+  localStorage.clear();
+  searchHistory = []
+  $("#history").empty()
+  
+})
     // $("#summary").append(summaryEl)
   }
 
-  
-  
 
