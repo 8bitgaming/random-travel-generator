@@ -26,7 +26,6 @@ let months = [
   'December'
   ];
 
-
 // First API call to get list of potential cities from geonames
 const api_url1 = "http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Short&cities=cities15000";
 
@@ -68,11 +67,13 @@ async function getRandomCity(api_url1) {
     cityLat = data2.geonames[remainder].lat
     cityLong = data2.geonames[remainder].lng
     $("#loading-message").text(`${cityName}!`)
+
     pSelected.innerText = "Your next destination: " + cityName;
     pCountryEl.innerText = "Country: " + country;
     pPPLEl.innerText = "Population: "  + population;
     timeZoneEl.innerText = "Time Zone: "  + timeZone;
     renderSearchHistory();
+
 
     //Make the call to get the weather details
     getWeather(cityLat, cityLong, units)
@@ -133,6 +134,7 @@ async function getRandomCity(api_url1) {
 
   //Event listener to start the search process and get the details for a random city
   fetchButton.addEventListener('click', function(e) {
+
     //clear any previous weather info
     $("#7-day-forecast").empty()
     $("#historical-weather").empty()
@@ -140,10 +142,12 @@ async function getRandomCity(api_url1) {
     if(e.target) {
       console.log("I'm clicked");
       getRandomCity(api_url1);
-
     }
-
     
+    if(e.target) {
+      console.log("I'm clicked");
+      getRandomCity(api_url1);
+    }
   });
 
   //Event listener to switch weather units, and recall the weather details
@@ -270,6 +274,8 @@ async function getRandomCity(api_url1) {
 
     //build summary div
     let summaryEl = $("#summary")
+
+    // summaryEl.classList.add("w3-blue", "w3-container", "w3-round")
     summaryEl.text(summary)
 
     let linkEl = document.createElement("a")
@@ -320,6 +326,7 @@ $("#clear-history").on("click", function () {
   $("#history").empty()
   
 })
+    // $("#summary").append(summaryEl)
+  }
 
-renderSearchHistory()
 
