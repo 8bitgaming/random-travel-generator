@@ -169,9 +169,6 @@ async function getRandomCity(api_url1) {
       $("#historical-weather").empty()
       getHistoricalWeather()
     }
-
-
-
   })
 
   //event listener for historical weather call
@@ -186,8 +183,6 @@ async function getRandomCity(api_url1) {
       historicalButton.text('Current')
       getWeather(cityLat, cityLong, units)
     }
-
-    
   })
 
   //function for historical weather details
@@ -240,10 +235,11 @@ async function getRandomCity(api_url1) {
           historicalForecastBox.id = `historical-month${i}`
           historicalForecastBox.classList.add("w3-card-4", "w3-blue", "w3-col", "m2", "l2", "w3-round", "w3-margin")
           
-          //append historical weather to existing DOM element
-          $("#historical-weather").append(historicalForecastBox)
-          $("#historical-month"+i).append(monthTitle, avgHighTemp, avgLowTemp, avgSunshine)
-
+          //append historical weather to existing DOM element4
+          $("#historical-weather").empty(historicalForecastBox);
+          $("#historical-month").empty(monthTitle, avgHighTemp, avgLowTemp, avgSunshine);
+          $("#historical-weather").append(historicalForecastBox);
+          $("#historical-month"+i).append(monthTitle, avgHighTemp, avgLowTemp, avgSunshine);
         }
   }
 //Connect to Wikipedia article summary for the city
@@ -267,9 +263,10 @@ async function getRandomCity(api_url1) {
 
     let linkEl = document.createElement("a")
     linkEl.setAttribute("href", link)
-    linkEl.setAttribute("target", "_blank")
+    //linkEl.setAttribute("target", "_blank")
     linkEl.textContent = "Link to full article"
-    $("#link").append(linkEl)
+    $("#link").empty(linkEl);
+    $("#link").append(linkEl);
 
     //clear any previous images that may exist
     $("#city-thumbnail").empty()
