@@ -133,6 +133,10 @@ async function getRandomCity(api_url1) {
 
   //Event listener to start the search process and get the details for a random city
   fetchButton.addEventListener('click', function(e) {
+    //clear any previous weather info
+    $("#7-day-forecast").empty()
+    $("#historical-weather").empty()
+
     if(e.target) {
       console.log("I'm clicked");
       getRandomCity(api_url1);
@@ -266,7 +270,6 @@ async function getRandomCity(api_url1) {
 
     //build summary div
     let summaryEl = $("#summary")
-    // summaryEl.classList.add("w3-blue", "w3-container", "w3-round")
     summaryEl.text(summary)
 
     let linkEl = document.createElement("a")
@@ -288,13 +291,12 @@ async function getRandomCity(api_url1) {
       $("#city-thumbnail").append(thumbnailEl)
       
       }
-    // $("#summary").append(summaryEl)
   }
 
   function renderSearchHistory() {
     
     let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
-    searchHistory.push(cityName);
+    if (cityName != ""){searchHistory.push(cityName);}
     localStorage.setItem("search",JSON.stringify(searchHistory));
     
     console.log(searchHistory);
@@ -311,3 +313,13 @@ async function getRandomCity(api_url1) {
         historyEl.append(historyItem);
     }
 }
+
+$("#clear-history").on("click", function () {
+  localStorage.clear();
+  searchHistory = []
+  $("#history").empty()
+  
+})
+
+renderSearchHistory()
+
