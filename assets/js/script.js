@@ -27,7 +27,7 @@ let months = [
   ];
 
 // First API call to get list of potential cities from geonames
-const api_url1 = "http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Short&cities=cities15000";
+const api_url1 = "https://secure.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Short&cities=cities15000";
 
 // Defining async function
 async function getRandomCity(api_url1) {
@@ -48,7 +48,7 @@ async function getRandomCity(api_url1) {
     startRow = Math.floor(cityNumber/1000);
     remainder = cityNumber%1000;
 
-    const api_url2 = `http://api.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Full&cities=cities15000&startRow=${startRow}`;
+    const api_url2 = `https://secure.geonames.org/searchJSON?username=lsmith32&country&maxRows=1000&style=Full&cities=cities15000&startRow=${startRow}`;
 
     const response2 = await fetch(api_url2);
     $("#loading-message").text("You're going to ...")
