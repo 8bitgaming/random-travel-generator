@@ -26,7 +26,6 @@ a better tool to make a plan for their next tour.
 ## Website
 https://8bitgaming.github.io/random-travel-generator/
 
-
 ## Instructions
 
 The users simply clicks on the button to explore their destination. 
